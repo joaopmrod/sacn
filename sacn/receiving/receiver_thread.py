@@ -3,7 +3,7 @@ import threading
 import time
 import socket
 import logging
-from typing import Dict
+#from typing import Dict#requires Python 3.5
 
 from sacn.messages.data_packet import DataPacket
 from sacn.receiver import LISTEN_ON_OPTIONS, E131_NETWORK_DATA_LOSS_TIMEOUT_ms
@@ -27,7 +27,7 @@ class receiverThread(threading.Thread):
         # the value is a tuple with the last priority and the time when this priority recently was received
         self.priorities = {}      
         # store the last timestamp when something on an universe arrived for checking for timeouts
-        self.lastDataTimestamp = {}
+        self.lastDataTimestamps = {}
         # store the last sequence number of a universe here:
         self.lastSequence = {}
         super().__init__(name='sACN input/receiver thread')
@@ -74,7 +74,7 @@ class receiverThread(threading.Thread):
             self.fire_timeout_callback_and_delete(packet.universe)
         else:
             # check if we add or refresh the data in lastDataTimestamps
-            if packet.universe not in self.lastDataTimestamps.keys():
+            if DataPacket.universe not in self.lastDataTimestamps.keys():
                 for callback in self.callbacks[LISTEN_ON_OPTIONS[0]]:
                     try:  # fire callbacks if this is the first received packet for this universe
                         callback(universe=packet.universe, changed='available')
