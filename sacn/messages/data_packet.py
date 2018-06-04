@@ -57,7 +57,7 @@ class DataPacket(RootLayer):
     @syncAddr.setter
     def syncAddr(self, sync_universe: int):
         if sync_universe not in range(0, 64000):
-            raise TypeError(f'sync_universe must be [1-63999]! value was {sync_universe}')
+            raise TypeError(f'sync_universe must be [0-63999]! value was {sync_universe}')
         self._syncAddr = sync_universe
 
     @property
